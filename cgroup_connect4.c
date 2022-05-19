@@ -66,21 +66,8 @@ lb4_lookup_service(struct V4_key *key) {
 
   svc = bpf_map_lookup_elem(&v4_svc_map, key);
   if (svc) {
-    // svc = bpf_map_lookup_elem(&v4_svc_map, key);
-    // if (svc && svc->count)
     return svc;
   }
-
-  // const char fmt_str[] = "No Service Found loading tmp service with key %x %x
-  // %x \n";
-
-  // bpf_trace_printk(fmt_str, sizeof(fmt_str), key->address, key->dport,
-  // key->backend_slot);
-
-  // struct lb4_service tmpsvc = { };
-  // tmpsvc.count = 5;
-
-  // bpf_map_update_elem(&v4_svc_map, key, &tmpsvc, BPF_ANY);
 
   return NULL;
 }
@@ -175,7 +162,7 @@ static __always_inline int __sock4_fwd(struct bpf_sock_addr *ctx) {
     return -ENXIO;
   }
 
-  // Logs are in sudo cat /sys/kernel/debug/tracing/trace_pipe
+  // Logs are in /sys/kernel/debug/tracing/trace_pipe
 
   const char debug_str[] = "Hello, world, from BPF! I am in the proxy program. I caught a\
   packet destined for my VIP, the address is: %x port is: %x and selected backend id is: %x\n";

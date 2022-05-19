@@ -68,7 +68,7 @@ func main() {
 	}
 	log.Printf("Backend Map Info: %+v", info)
 
-	// Add a fake service with no backends
+	// Add a fake service with one backend
 	fakeServiceValue := Service4Value{
 		BackendID: 0,
 		Count:     1,
@@ -104,6 +104,7 @@ func main() {
 
 	copy(fakeBackend.Address[:], fakeBackendIP.To4())
 
+	// I picked a random key here
 	fakeBackendKey := Backend4Key{
 		ID: 500,
 	}
@@ -144,7 +145,7 @@ func main() {
 	log.Printf("Curling VIP %s:80 from host", os.Args[1])
 	resp, err := http.Get("http://169.1.1.1")
 	if err != nil {
-		log.Print("Curl to VIP failed: %v", err)
+		log.Printf("Curl to VIP failed: %v", err)
 		return
 	}
 	defer resp.Body.Close()
