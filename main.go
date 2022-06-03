@@ -7,6 +7,7 @@ import (
 	"bufio"
 	"encoding/binary"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net"
@@ -60,14 +61,13 @@ func main() {
 	if err != nil {
 		log.Fatalf("Cannot get map info: %v", err)
 	}
-	log.Printf("Svc Map Info: %+v", info)
+	log.Printf("Svc Map Info: %+v + str %s", info, objs.V4SvcMap.String())
 
 	info, err = objs.bpfMaps.V4BackendMap.Info()
 	if err != nil {
 		log.Fatalf("Cannot get map info: %v", err)
 	}
 	log.Printf("Backend Map Info: %+v", info)
-
 	// Add a fake service with one backend
 	fakeServiceValue := Service4Value{
 		BackendID: 0,
@@ -79,6 +79,7 @@ func main() {
 	fakeServiceValue2.BackendID = 500
 
 	fakeVIP := net.ParseIP(os.Args[1])
+
 	port := [2]byte{}
 
 	binary.BigEndian.PutUint16(port[:], 80)
@@ -95,11 +96,13 @@ func main() {
 	copy(fakeServiceKey2.Address[:], fakeVIP.To4())
 
 	fakeBackendIP := net.ParseIP(os.Args[2])
+	if len(fakeBackendIP.String()) == 0 {
+		log.Fatalf("Backend container not started Please try again")
+	}
 
 	// Add a fake backend
 	fakeBackend := Backend4Value{
-		Port:  port,
-		Proto: 6, // TCP
+		Port: port,
 	}
 
 	copy(fakeBackend.Address[:], fakeBackendIP.To4())
@@ -154,6 +157,8 @@ func main() {
 
 	log.Printf("Response: %s", string(body))
 
+	log.Println("\n\nPress the Enter Key to terminate ebpf program!")
+	fmt.Scanln() // wait for Enter Key
 }
 
 // detectCgroupPath returns the first-found mount point of type cgroup2

@@ -31,25 +31,20 @@ type Service4Key struct {
 	Address     IPv4
 	Port        Port
 	BackendSlot uint16
-	// Proto       uint8     `align:"proto"`
-	// Scope       uint8     `align:"scope"`
-	// Pad uint16 `align:"pad"`
 }
 
 // Backend4Value must match 'struct lb4_backend' in "bpf/lib/common.h".
 type Backend4Value struct {
 	Address IPv4
 	Port    Port
-	Proto   U8proto
 	Flags   uint8
+	Pad     uint8
 }
 
 type pad2uint8 [2]uint8
 
 type IPv4 [4]byte
 type Port [2]byte
-
-type U8proto uint8
 
 type Backend4Key struct {
 	ID uint32
