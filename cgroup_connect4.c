@@ -10,7 +10,7 @@
 #define SYS_PROCEED 1
 #define DEFAULT_MAX_EBPF_MAP_ENNTRIES 65536
 
-char __license[] SEC("license") = "Dual MIT/GPL";
+char __license[] SEC("license") = "BSD-2-Clause";
 
 struct V4_key {
   __be32 address;     /* Service virtual IPv4 address  4*/
