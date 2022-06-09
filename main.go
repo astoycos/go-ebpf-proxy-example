@@ -30,6 +30,9 @@ func main() {
 	// Name of the kernel function we're tracing
 	fn := "count_sock4_connect"
 
+	if len(os.Args) != 3 {
+		log.Fatal("Not enough arguments supplied, need VIP and Backend Server IP's")
+	}
 	// Allow the current process to lock memory for eBPF resources.
 	if err := rlimit.RemoveMemlock(); err != nil {
 		log.Fatal(err)

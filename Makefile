@@ -14,7 +14,7 @@ UIDGID := $(shell stat -c '%u:%g' ${REPODIR})
 # Note: Setting the var at runtime will always override.
 CONTAINER_ENGINE ?= $(if $(shell command -v podman), podman, docker)
 CONTAINER_RUN_ARGS ?= $(if $(filter ${CONTAINER_ENGINE}, podman),, --user "${UIDGID}")
-
+export ${CONTAINER_ENGINE}
 IMAGE := quay.io/cilium/ebpf-builder
 VERSION := 1648566014
 
@@ -84,10 +84,5 @@ generate:
 	$(STRIP) -g $@
 
 	
-run: .PHONY
-	go get github.com/cilium/ebpf/cmd/bpf2go@latest
-	go generate ./
-	go build
-	docker kill server || true && docker rm server || true
-	docker run --name server -d -p 8080:80 nginx
-	sudo ./go-ebpf-proxy-example 169.1.1.1 $(shell docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' server)
+run:
+	./run.sh ${CONTAINER_ENGINE} 

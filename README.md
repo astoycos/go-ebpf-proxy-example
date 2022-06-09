@@ -1,6 +1,10 @@
 # Example EBPF Proxy Implementation 
 
-** Dependencies -> Docker, go > 1.17 
+** Dependencies -> Docker OR Podman
+                -> go >= 1.17 
+                -> LLVM (`sudo dnf install llvm`)
+                -> GLIBC (`sudo dnf install glibc-devel.i686`)
+                -> Disable Firewalld (`sudo systemctl disable firewalld`)
 
 This ebpf program was adapted from Cilium's implementation of kube-proxy, but pulled 
 out and configured to run separated from Cilium's control plane. 
